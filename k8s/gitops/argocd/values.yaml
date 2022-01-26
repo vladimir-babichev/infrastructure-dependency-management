@@ -101,7 +101,7 @@ argo-cd:
         subPath: argocd-vault-plugin
     initContainers:
       - name: download-tools
-        image: alpine:3.10
+        image: alpine:3.15
         command: [sh, -c]
         args:
           - >-
