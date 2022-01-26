@@ -33,7 +33,9 @@ It is an Uber repository that does full lifecycle management for the given envir
 * [pre-commit](https://pre-commit.com/)
 * [Terraform](https://www.terraform.io/)
 
-## ArgoCD
+## Dependencies
+
+### ArgoCD
 
 * Application deployed as a raw k8s resource
   ![ArgoCD Applicaiton](img/argocd-application.png)
@@ -43,6 +45,7 @@ It is an Uber repository that does full lifecycle management for the given envir
 
 * OTS (off-the-shelf) Helm chart pinned to a specific version from an upstream helm repository and customized with extra resources and values.
   ![Vault Applicaiton](img/vault-application.png)
+
 * Helm charts have dependencies
   ![Vault Chart Dependencies](img/vault-chart.png)
 
@@ -50,12 +53,12 @@ It is an Uber repository that does full lifecycle management for the given envir
   ![Vault Chart Values](img/vault-chart-values.png)
   ![ArgoCD Chart Values](img/argocd-chart-values.png)
 
-## Terraform
+### Terraform
 
 * Terraform module used to configure Vault
 ![Terraform module](img/terraform-module.png)
 
-## pre-commit
+### pre-commit
 
 * Markdownlint
 * Shellcheck
@@ -64,10 +67,42 @@ It is an Uber repository that does full lifecycle management for the given envir
 
 ![pre-commit config](img/pre-commit-config.png)
 
-## GitHub Actions
+### GitHub Actions
 
 * Checkout
 * Python
 * Cache
 
 ![GitHub Actions](img/github-actions.png)
+
+## Renovate
+
+[Renovate](https://docs.renovatebot.com/) (often referred to as "Renovate Bot") is an Open Source tool to automate:
+
+* Detecting dependencies in a repository (Open Source and private/closed source)
+* Checking if there are newer versions which can be updated to
+* Creating commits and Merge/Pull Requests to apply such changes, and show the Release Notes (if available)
+
+### [Supported platforms](https://docs.renovatebot.com/modules/platform/)
+
+* azure
+* bitbucket
+* bitbucket-server
+* gitea
+* github
+* gitlab
+
+### [Supported Managers](https://docs.renovatebot.com/modules/manager/)
+
+* ansible
+* docker-compose
+* dockerfile
+* github-actions
+* helm
+* homebrew
+* kubernetes
+* kustomize
+* pre-commit
+* terraform
+* terragrunt
+* ...
