@@ -1,0 +1,11 @@
+apiVersion: v2
+name: vault
+version: 0.1.0
+
+dependencies:
+  - name: vault
+    version: "0.18.*"
+    repository: https://helm.releases.hashicorp.com
+  - name: commonlib
+    version: 0.1.0
+    repository: https://vladimir-babichev.github.io/helm-charts/

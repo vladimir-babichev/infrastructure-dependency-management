@@ -1,0 +1,20 @@
+{{- range $k, $v := .Values.clusterIssuers }}
+{{- with $ }}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ default $k $v.name }}
+  {{- if $v.annotations }}
+  annotations:
+    {{- toYaml $v.annotations | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "commonlib.labels" $ | nindent 4 }}
+    {{- if $v.labels }}
+    {{- toYaml $v.labels | nindent 4 }}
+    {{- end }}
+spec:
+  {{- toYaml $v.spec | nindent 2 }}
+{{- end }}
+{{- end }}

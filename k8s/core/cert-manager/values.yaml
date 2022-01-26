@@ -1,0 +1,37 @@
+cert-manager:
+  installCRDs: true
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+      operator: Exists
+  extraArgs:
+    - --dns01-recursive-nameservers-only
+    - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
+  podDnsConfig:
+    nameservers:
+      - 1.1.1.1
+      - 8.8.8.8
+  podDnsPolicy: None
+
+clusterIssuers:
+  letsencrypt:
+    annotations:
+      argocd.argoproj.io/sync-wave: "99"
+    spec:
+      acme:
+        server: https://acme-v02.api.letsencrypt.org/directory
+        email: <path:secrets/data/k8s/cert-manager/secrets#email>
+        privateKeySecretRef:
+          name: cert-manager-letsencrypt-secret
+        solvers:
+          - http01:
+              ingress:
+                ingressTemplate:
+                  metadata:
+                    annotations:
+                      traefik.ingress.kubernetes.io/router.entrypoints: "web"
+                      traefik.ingress.kubernetes.io/router.tls: "false"
+                      traefik.ingress.kubernetes.io/router.priority: "42"
+                      kubernetes.io/ingress.class: traefik-external

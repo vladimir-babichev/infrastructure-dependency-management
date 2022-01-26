@@ -1,0 +1,114 @@
+---
+###
+# Templated values
+###
+.affinity: &x-affinity
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+
+.domain: &x-domain "argocd.<path:secrets/data/k8s/cluster#domain>"
+.url: &x-url "https://argocd.<path:secrets/data/k8s/cluster#domain>"
+.metrics: &x-metrics
+  metrics:
+    enabled: false
+    serviceMonitor:
+      enabled: false
+
+###
+# Configuration
+###
+argo-cd:
+  global:
+    image:
+      repository: argoproj/argocd
+      tag: v2.2.0
+
+  server:
+    <<: *x-affinity
+    <<: *x-metrics
+    extraArgs:
+      - --insecure
+    config:
+      application.instanceLabelKey: argocd.argoproj.io/instance
+      repositories: |
+        - name: argo
+          type: helm
+          url: https://argoproj.github.io/argo-helm
+        - name: stable
+          type: helm
+          url: https://charts.helm.sh/stable
+      url: *x-url
+      configManagementPlugins: |-
+        - name: argocd-vault-plugin-helm
+          init:
+            command: [sh, -c]
+            args: ["helm dependency build"]
+          generate:
+            command: ["sh", "-c"]
+            args: ["helm template $ARGOCD_APP_NAME ${helm_args} . | argocd-vault-plugin generate -"]
+
+    ingress:
+      annotations:
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        cert-manager.io/cluster-issuer: letsencrypt
+        kubernetes.io/ingress.class: traefik-internal
+      enabled: true
+      hosts:
+        - *x-domain
+      paths:
+        - /
+      tls:
+        - secretName: *x-domain
+          hosts:
+            - *x-domain
+
+  controller:
+    <<: *x-affinity
+    <<: *x-metrics
+
+  dex:
+    <<: *x-affinity
+    <<: *x-metrics
+    enabled: false
+
+  repoServer:
+    <<: *x-affinity
+    <<: *x-metrics
+    serviceAccount:
+      create: true
+    env:
+      - name: AVP_AUTH_TYPE
+        value: k8s
+      - name: AVP_K8S_ROLE
+        value: k8s-secrets-ro
+      - name: AVP_TYPE
+        value: vault
+      - name: VAULT_ADDR
+        value: http://vault.core.svc:8200
+    volumes:
+      - name: custom-tools
+        emptyDir: {}
+    volumeMounts:
+      - name: custom-tools
+        mountPath: /usr/local/bin/argocd-vault-plugin
+        subPath: argocd-vault-plugin
+    initContainers:
+      - name: download-tools
+        image: alpine:3.10
+        command: [sh, -c]
+        args:
+          - >-
+            wget -O argocd-vault-plugin
+            https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v1.6.0/argocd-vault-plugin_1.6.0_linux_amd64 &&
+            chmod +x argocd-vault-plugin &&
+            mv argocd-vault-plugin /custom-tools/
+        volumeMounts:
+          - mountPath: /custom-tools
+            name: custom-tools

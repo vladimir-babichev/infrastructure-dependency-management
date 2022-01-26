@@ -1,0 +1,6 @@
+pihole:
+  virtualHost: pihole.<path:secrets/data/k8s/cluster#domain>
+  adminPassword: <path:secrets/data/k8s/pihole/secrets#password>
+  image:
+    repository: pihole/pihole
+    tag: 2021.12.1

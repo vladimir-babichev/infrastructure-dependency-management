@@ -1,0 +1,10 @@
+apiVersion: v2
+name: cert-manager
+version: 0.1.0
+dependencies:
+  - name: cert-manager
+    version: "1.6.*"
+    repository: https://charts.jetstack.io
+  - name: commonlib
+    version: 0.1.2
+    repository: https://vladimir-babichev.github.io/helm-charts/

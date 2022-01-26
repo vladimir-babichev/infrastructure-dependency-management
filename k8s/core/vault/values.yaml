@@ -1,0 +1,55 @@
+###
+# Templated values
+###
+.hostname: &x-hostname "vault.<path:secrets/data/k8s/cluster#domain>"
+.volume: &x-volume-name "vault-data"
+
+###
+# Configuration
+###
+vault:
+  injector:
+    enabled: false
+
+  server:
+    image:
+      repository: vault
+      tag: 1.9.2
+
+    ingress:
+      enabled: true
+      annotations:
+        traefik.ingress.kubernetes.io/router.tls: "true"
+        cert-manager.io/cluster-issuer: letsencrypt
+        kubernetes.io/ingress.class: traefik-internal
+      activeService: true
+      hosts:
+        - host: *x-hostname
+      tls:
+        - secretName: *x-hostname
+          hosts:
+            - *x-hostname
+
+    dataStorage:
+      enabled: false
+
+    volumeMounts:
+      - mountPath: /vault/data
+        name: *x-volume-name
+
+    volumes:
+      - name: *x-volume-name
+        emptyDir: {}
+
+    standalone:
+      enabled: "-"
+
+      config: |
+        ui = true
+        listener "tcp" {
+          address         = "0.0.0.0:8200"
+          tls_disable     = 1
+        }
+        storage "file" {
+          path = "/vault/data"
+        }

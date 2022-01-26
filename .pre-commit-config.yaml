@@ -1,0 +1,39 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+        args:
+          - --allow-multiple-documents
+          - --unsafe
+        exclude: "templates/"
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: trailing-whitespace
+
+  - repo: https://github.com/sirosen/texthooks
+    rev: 0.2.2
+    hooks:
+      - id: fix-smartquotes
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.26.0
+    hooks:
+      - id: yamllint
+        name: Yamllint
+
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.17
+    hooks:
+      - id: shellcheck
+        name: Shellcheck
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.30.0
+    hooks:
+      - id: markdownlint
+        name: Markdownlint
