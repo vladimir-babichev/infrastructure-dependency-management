@@ -18,6 +18,11 @@
       ".github"
     ]
   },
+  "argocd": {
+    "fileMatch": [
+      "k8s/.+/apps/.+\\.yaml$",
+    ]
+  },
   "packageRules": [
     // Setup datasources
     {
@@ -47,101 +52,6 @@
         "docker"
       ],
       "semanticCommitScope": "images",
-      "separateMinorPatch": true
-    },
-    // Add labels according to package and update types
-    {
-      "datasources": [
-        "docker"
-      ],
-      "updateTypes": [
-        "major"
-      ],
-      "labels": [
-        "renovate/image",
-        "dep/major"
-      ]
-    },
-    {
-      "datasources": [
-        "docker"
-      ],
-      "updateTypes": [
-        "minor"
-      ],
-      "labels": [
-        "renovate/image",
-        "dep/minor"
-      ]
-    },
-    {
-      "datasources": [
-        "docker"
-      ],
-      "updateTypes": [
-        "patch"
-      ],
-      "labels": [
-        "renovate/image",
-        "dep/patch"
-      ]
-    },
-    {
-      "datasources": [
-        "helm"
-      ],
-      "updateTypes": [
-        "major"
-      ],
-      "labels": [
-        "renovate/helm",
-        "dep/major"
-      ]
-    },
-    {
-      "datasources": [
-        "helm"
-      ],
-      "updateTypes": [
-        "minor"
-      ],
-      "labels": [
-        "renovate/helm",
-        "dep/minor"
-      ]
-    },
-    {
-      "datasources": [
-        "helm"
-      ],
-      "updateTypes": [
-        "patch"
-      ],
-      "labels": [
-        "renovate/helm",
-        "dep/patch"
-      ]
-    },
-    // Custom versions
-    {
-      "matchDatasources": [
-        "docker"
-      ],
-      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-(?<compatibility>.*)$",
-      "matchPackageNames": [
-        "blakeblackshear/frigate"
-      ]
-    },
-    {
-      "matchDatasources": [
-        "github-tags",
-        "docker"
-      ],
-      "matchPackagePatterns": [
-        "rancher/system-upgrade-controller"
-      ],
-      "groupName": "system-upgrade-controller-suite",
-      "additionalBranchPrefix": "",
       "separateMinorPatch": true
     }
   ]
