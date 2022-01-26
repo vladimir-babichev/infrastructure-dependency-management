@@ -14,7 +14,7 @@ resource "vault_mount" "secrets" {
 #------------------------------------------------------------------------------
 
 module "k8s-auth" {
-  source = "github.com/vladimir-babichev/infrastructure-dependency-management//terraform/modules/k8s-auth?ref=v0.1.0"
+  source = "github.com/vladimir-babichev/infrastructure-dependency-management//terraform/modules/k8s-auth?ref=v0.2.0"
 
   kubernetes_host           = var.kubernetes_host
   vault_k8s_sa              = var.vault_k8s_sa
