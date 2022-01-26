@@ -7,5 +7,5 @@ dependencies:
     version: "2.5.*"
     repository: https://mojo2600.github.io/pihole-kubernetes/
   - name: commonlib
-    version: 0.1.0
+    version: 0.1.2
     repository: https://vladimir-babichev.github.io/helm-charts/
