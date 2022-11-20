@@ -3,4 +3,4 @@ pihole:
   adminPassword: <path:secrets/data/k8s/pihole/secrets#password>
   image:
     repository: pihole/pihole
-    tag: 2021.12.1
+    tag: 2022.11.1
