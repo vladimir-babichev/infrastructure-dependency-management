@@ -3,7 +3,7 @@ name: cert-manager
 version: 0.1.0
 dependencies:
   - name: cert-manager
-    version: "1.6.*"
+    version: "1.14.*"
     repository: https://charts.jetstack.io
   - name: commonlib
     version: 0.1.2
